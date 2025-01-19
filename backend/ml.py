@@ -1,5 +1,10 @@
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.metrics import mean_squared_error, r2_score
+from xgboost import XGBRegressor
 
-<<<<<<< HEAD
 # Load and preprocess the data
 energy_data = pd.read_csv(r"C:\Users\mailt\onedrive\desktop\energyhack\energyhack\backend\data\energy_dataset.csv")
 
@@ -59,5 +64,3 @@ import joblib
 joblib.dump(xgb_reg, 'xgboost_energy_model.joblib')
 
 joblib.dump(scaler, 'scaler.joblib')
-=======
->>>>>>> 1e51e2d99823634b5c293e0bdb8d53e1629be3b1
