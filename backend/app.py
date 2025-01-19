@@ -1,12 +1,18 @@
 from flask import Flask, request, jsonify, render_template
 import joblib
 import numpy as np
+from flask_cors import CORS
+import os
 
 app = Flask(__name__, template_folder='../frontend', static_folder='../static')
+CORS(app)  # Enable CORS for all routes
 
-# Load the model and scaler
-model = joblib.load('xgboost_energy_model.joblib')
-scaler = joblib.load('scaler.joblib')
+# Get the directory of the current file
+current_dir = os.path.dirname(os.path.abspath(__file__))
+
+# Load the model and scaler using absolute paths
+model = joblib.load(os.path.join(current_dir, 'xgboost_energy_model.joblib'))
+scaler = joblib.load(os.path.join(current_dir, 'scaler.joblib'))
 
 @app.route('/')
 def index():
@@ -52,4 +58,5 @@ def predict():
     })
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
