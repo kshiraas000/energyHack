@@ -4,7 +4,7 @@ import numpy as np
 from flask_cors import CORS
 import os
 
-app = Flask(__name__, template_folder='../frontend', static_folder='../static')
+app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
 # Get the directory of the current file
