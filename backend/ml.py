@@ -58,3 +58,9 @@ feature_importance = xgb_reg.feature_importances_
 feature_names = X.columns
 for importance, name in sorted(zip(feature_importance, feature_names), reverse=True):
     print(f"{name}: {importance:.4f}")
+
+import joblib
+
+joblib.dump(xgb_reg, 'xgboost_energy_model.joblib')
+
+joblib.dump(scaler, 'scaler.joblib')
