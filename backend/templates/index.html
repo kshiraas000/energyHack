@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Price Prediction</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Energy Price Prediction</h1>
+    <form id="prediction-form">
+        <label for="generation_biomass">Generation Biomass:</label>
+        <input type="number" id="generation_biomass" name="generation biomass" required><br><br>
+        
+        <label for="generation_fossil_brown_coal">Generation Fossil Brown Coal/Lignite:</label>
+        <input type="number" id="generation_fossil_brown_coal" name="generation fossil brown coal/lignite" required><br><br>
+        
+        <label for="generation_fossil_gas">Generation Fossil Gas:</label>
+        <input type="number" id="generation_fossil_gas" name="generation fossil gas" required><br><br>
+        
+        <label for="generation_fossil_hard_coal">Generation Fossil Hard Coal:</label>
+        <input type="number" id="generation_fossil_hard_coal" name="generation fossil hard coal" required><br><br>
+        
+        <label for="generation_fossil_oil">Generation Fossil Oil:</label>
+        <input type="number" id="generation_fossil_oil" name="generation fossil oil" required><br><br>
+        
+        <label for="generation_hydro_pumped_storage_consumption">Generation Hydro Pumped Storage Consumption:</label>
+        <input type="number" id="generation_hydro_pumped_storage_consumption" name="generation hydro pumped storage consumption" required><br><br>
+        
+        <label for="generation_hydro_run_of_river_and_poundage">Generation Hydro Run-of-river and Poundage:</label>
+        <input type="number" id="generation_hydro_run_of_river_and_poundage" name="generation hydro run-of-river and poundage" required><br><br>
+        
+        <label for="generation_hydro_water_reservoir">Generation Hydro Water Reservoir:</label>
+        <input type="number" id="generation_hydro_water_reservoir" name="generation hydro water reservoir" required><br><br>
+        
+        <label for="generation_nuclear">Generation Nuclear:</label>
+        <input type="number" id="generation_nuclear" name="generation nuclear" required><br><br>
+        
+        <label for="generation_other">Generation Other:</label>
+        <input type="number" id="generation_other" name="generation other" required><br><br>
+        
+        <label for="generation_other_renewable">Generation Other Renewable:</label>
+        <input type="number" id="generation_other_renewable" name="generation other renewable" required><br><br>
+        
+        <label for="generation_solar">Generation Solar:</label>
+        <input type="number" id="generation_solar" name="generation solar" required><br><br>
+        
+        <label for="generation_waste">Generation Waste:</label>
+        <input type="number" id="generation_waste" name="generation waste" required><br><br>
+        
+        <label for="generation_wind_onshore">Generation Wind Onshore:</label>
+        <input type="number" id="generation_wind_onshore" name="generation wind onshore" required><br><br>
+        
+        <label for="forecast_solar_day_ahead">Forecast Solar Day Ahead:</label>
+        <input type="number" id="forecast_solar_day_ahead" name="forecast solar day ahead" required><br><br>
+        
+        <label for="forecast_wind_onshore_day_ahead">Forecast Wind Onshore Day Ahead:</label>
+        <input type="number" id="forecast_wind_onshore_day_ahead" name="forecast wind onshore day ahead" required><br><br>
+        
+        <label for="total_load_forecast">Total Load Forecast:</label>
+        <input type="number" id="total_load_forecast" name="total load forecast" required><br><br>
+        
+        <label for="total_load_actual">Total Load Actual:</label>
+        <input type="number" id="total_load_actual" name="total load actual" required><br><br>
+        
+        <label for="price_day_ahead">Price Day Ahead:</label>
+        <input type="number" id="price_day_ahead" name="price day ahead" required><br><br>
+        
+        <button type="submit">Predict</button>
+    </form>
+
+    <div id="result"></div>
+
+    <script src="/static/js/home.js"></script>
+    <script>
+        $(document).ready(function() {
+            const API_URL = 'https://smartsave-cgw1.onrender.com';
+    
+            $('#prediction-form').submit(function(e) {
+                e.preventDefault();
+                
+                // Show loading state
+                $('#result').html('<p>Calculating prediction...</p>');
+                
+                const formData = {};
+                $(this).serializeArray().forEach(item => {
+                    formData[item.name] = item.value;
+                });
+                
+                $.ajax({
+                    url: `${API_URL}/predict`,
+                    method: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        $('#result').html(`
+                            <div>
+                                <h3>Prediction Results</h3>
+                                <p>Predicted Price: €${response.predicted_price.toFixed(2)}</p>
+                                <p>Recommended Action: ${response.action}</p>
+                            </div>
+                        `);
+                    },
+                    error: function(xhr, status, error) {
+                        $('#result').html(`<div class="error">Error: ${error}</div>`);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
